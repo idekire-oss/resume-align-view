@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  background: #ece4d4;
+  color: #1c1917;
+  font-family: Helvetica, Arial, "Segoe UI", sans-serif;
+}
+
+.note,
+.error,
+.empty {
+  max-width: 720px;
+  margin: 16px auto 0;
+  padding: 0 16px;
+  font: 13px/1.45 "Segoe UI", sans-serif;
+}
+
+.error {
+  color: #9f1239;
+}
+
+.empty .file {
+  display: inline-block;
+  border: 1px solid #1c1917;
+  background: #fff;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.empty input {
+  display: block;
+  margin-top: 8px;
+}
+
+.sheet {
+  max-width: 720px;
+  margin: 16px auto 48px;
+  background: #fff;
+  padding: 48px 52px;
+}
+
+.sheet.tight { padding: 32px 36px; }
+.sheet.airy { padding: 56px 56px; }
+
+.sheet-head {
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+}
+
+.sheet-head.none { border-bottom: 0; }
+.sheet-head.double { border-bottom-width: 3px; border-bottom-style: double; }
+.sheet-head.center { text-align: center; }
+
+h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+h1.upper { text-transform: uppercase; }
+
+.label,
+.contact,
+.company,
+.dates {
+  color: inherit;
+  opacity: 0.78;
+}
+
+.label { margin: 4px 0 0; }
+.contact { font-size: 13px; }
+
+h3 {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 16px 0 6px;
+}
+
+h3.bar { border-left: 3px solid currentColor; padding-left: 8px; }
+h3.underline { border-bottom: 1px solid currentColor; padding-bottom: 3px; }
+
+.job header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 11.5rem;
+  column-gap: 12px;
+}
+
+.dates { text-align: right; white-space: nowrap; }
+ul { margin: 4px 0 10px; padding-left: 18px; }

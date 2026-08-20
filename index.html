@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'none'; font-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+  />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Resume view</title>
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+  <p id="note" class="note">
+    Display only. No generate, no Ollama, no upload to a server. Open a view file or use a link from Resume Align on your PC.
+  </p>
+  <p id="error" class="error" hidden></p>
+  <div id="empty" class="empty">
+    <label class="file">
+      Open .view.json
+      <input id="file" type="file" accept="application/json,.json,.view.json" />
+    </label>
+  </div>
+  <article id="sheet" class="sheet" hidden></article>
+  <script src="catalog.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
