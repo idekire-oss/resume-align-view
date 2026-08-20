@@ -375,7 +375,7 @@
     if (kind === "pdf") {
       const frame = el("iframe", "file-frame");
       frame.title = "PDF";
-      frame.src = objectUrl;
+      frame.src = `${objectUrl}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`;
       sheetEl.appendChild(frame);
     } else {
       const img = el("img", "file-image");
