@@ -11,7 +11,16 @@
     mono: '"Courier New", Courier, monospace',
   };
 
+  const MAX_FILE_BYTES = 10 * 1024 * 1024;
+  let objectUrl = "";
+
+  function clearObjectUrl() {
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = "";
+  }
+
   function fail(message) {
+    clearObjectUrl();
     errorEl.hidden = false;
     errorEl.textContent = message;
     sheetEl.hidden = true;
@@ -159,6 +168,7 @@
     const look = catalog.looks[payload.look];
     const [ink, muted, accent, rule, headingStyle, nameCase, align, density] = look;
     const track = look[8];
+    clearObjectUrl();
     sheetEl.replaceChildren();
     sheetEl.className = `sheet ${density}`;
     sheetEl.style.color = ink;
@@ -329,18 +339,77 @@
     }
   }
 
+  function sniff(bytes, name) {
+    const lower = name.toLowerCase();
+    if (lower.endsWith(".pdf") || (bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46)) {
+      return "pdf";
+    }
+    if (
+      (bytes[0] === 0xff && bytes[1] === 0xd8) ||
+      (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) ||
+      (bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) ||
+      lower.endsWith(".png") ||
+      lower.endsWith(".jpg") ||
+      lower.endsWith(".jpeg") ||
+      lower.endsWith(".webp")
+    ) {
+      return "image";
+    }
+    if (
+      lower.endsWith(".doc") ||
+      lower.endsWith(".docx") ||
+      lower.endsWith(".xls") ||
+      lower.endsWith(".xlsx") ||
+      (bytes[0] === 0x50 && bytes[1] === 0x4b)
+    ) {
+      return "office";
+    }
+    return "json";
+  }
+
+  function showBlob(file, kind) {
+    clearObjectUrl();
+    objectUrl = URL.createObjectURL(file);
+    sheetEl.replaceChildren();
+    sheetEl.className = "sheet file-echo";
+    if (kind === "pdf") {
+      const frame = el("iframe", "file-frame");
+      frame.title = "PDF";
+      frame.src = objectUrl;
+      sheetEl.appendChild(frame);
+    } else {
+      const img = el("img", "file-image");
+      img.alt = "Resume scan";
+      img.src = objectUrl;
+      sheetEl.appendChild(img);
+    }
+    errorEl.hidden = true;
+    emptyEl.hidden = true;
+    sheetEl.hidden = false;
+  }
+
   fileEl.addEventListener("change", async () => {
     const file = fileEl.files && fileEl.files[0];
     fileEl.value = "";
     if (!file) return;
-    if (file.size > 200_000) {
-      fail("View file is too large.");
+    if (file.size > MAX_FILE_BYTES) {
+      fail("That file is larger than 10 MB. Typical resumes are under 5 MB.");
       return;
     }
     try {
+      const head = new Uint8Array(await file.slice(0, 16).arrayBuffer());
+      const kind = sniff(head, file.name);
+      if (kind === "pdf" || kind === "image") {
+        showBlob(file, kind);
+        return;
+      }
+      if (kind === "office") {
+        fail("Word and Excel stay on your PC. In Resume Align, generate then copy the public view link — or save a PDF (max 10 MB).");
+        return;
+      }
       await show(JSON.parse(await file.text()));
     } catch {
-      fail("That file is not a valid view JSON.");
+      fail("That file is not a valid view JSON or PDF.");
     }
   });
 

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'none'; font-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    content="default-src 'none'; script-src 'self'; style-src 'self'; img-src blob:; font-src 'none'; connect-src 'none'; frame-src blob:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
   />
   <meta name="referrer" content="no-referrer" />
   <meta name="robots" content="noindex,nofollow" />
@@ -14,13 +14,13 @@
 </head>
 <body>
   <p id="note" class="note">
-    Display only. No generate, no Ollama, no upload to a server. Open a view file or use a link from Resume Align on your PC.
+    Display only. No generate, no Ollama, no upload to a server. Open a view file or PDF (max 10 MB), or use a link from Resume Align on your PC.
   </p>
   <p id="error" class="error" hidden></p>
   <div id="empty" class="empty">
     <label class="file">
-      Open .view.json
-      <input id="file" type="file" accept="application/json,.json,.view.json" />
+      Open .view.json or PDF
+      <input id="file" type="file" />
     </label>
   </div>
   <article id="sheet" class="sheet" hidden></article>
